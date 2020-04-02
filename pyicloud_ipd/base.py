@@ -1,7 +1,6 @@
 import six
 import uuid
 import hashlib
-import inspect
 import json
 import logging
 import requests
@@ -55,11 +54,7 @@ class PyiCloudSession(requests.Session):
         super(PyiCloudSession, self).__init__()
 
     def request(self, *args, **kwargs):
-
-        # Charge logging to the right service endpoint
-        callee = inspect.stack()[2]
-        module = inspect.getmodule(callee[0])
-        logger = logging.getLogger(module.__name__).getChild('http')
+        logger = logging.getLogger(self.__class__.__name__)
         if self.service._password_filter not in logger.filters:
             logger.addFilter(self.service._password_filter)
 
